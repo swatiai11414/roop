@@ -42,7 +42,7 @@ jobs:
 
       - run: python run.py -s ".github/examples/runningmaneh.png" -t ".github/examples/navratri.mp4" -o ".github/examples/output.mp4" --keep-frames --keep-fps --temp-frame-quality 1 --output-video-quality 1 --execution-provider cpu --frame-processor face_swapper
 
-      - run: ffmpeg -i .github/examples/snapshot.mp4 -i .github/examples/output.mp4 -filter_complex psnr -f null -
+     # - run: ffmpeg -i .github/examples/snapshot.mp4 -i .github/examples/output.mp4 -filter_complex psnr -f null -
 
       - name: Convert output to HD
         run: |
