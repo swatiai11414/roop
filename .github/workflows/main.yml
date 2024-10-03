@@ -25,6 +25,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Install CUDA
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nvidia-cuda-toolkit
+
       - name: Set up ffmpeg
         uses: FedericoCarboni/setup-ffmpeg@v2
 
@@ -35,12 +40,16 @@ jobs:
 
       - run: pip install -r requirements-headless.txt
 
-      - run: python run.py -s ".github/examples/runningmaneh.png" -t ".github/examples/navratri.mp4" -o ".github/examples/output.mp4" --keep-frames --keep-fps --temp-frame-quality 1 --output-video-quality 1 --execution-provider cuda --frame-processor face_swapper face_enhancer
+      - run: python run.py -s ".github/examples/runningmaneh.png" -t ".github/examples/navratri.mp4" -o ".github/examples/output.mp4" --keep-frames --keep-fps --temp-frame-quality 1 --output-video-quality 1 --execution-provider cpu --frame-processor face_swapper face_enhancer
 
-      - run: ffmpeg -i .github/examples/output.mp4 -i .github/examples/output.mp4 -filter_complex psnr -f null -
+      - run: ffmpeg -i .github/examples/snapshot.mp4 -i .github/examples/output.mp4 -filter_complex psnr -f null -
 
-      - name: Upload output.mp4 as artifact
+      - name: Convert output to HD
+        run: |
+          ffmpeg -i .github/examples/output.mp4 -vf "scale=1920:1080" -c:a copy .github/examples/output_hd.mp4
+
+      - name: Upload output_hd.mp4 as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: output-video
-          path: .github/examples/output.mp4
+          name: output-hd-video
+          path: .github/examples/output_hd.mp4
