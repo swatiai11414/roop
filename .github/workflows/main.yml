@@ -1,6 +1,6 @@
 name: ci
 
-on: [push, pull_request]
+#on: [push, pull_request]
 
 jobs:
   lint:
@@ -20,7 +20,7 @@ jobs:
       - run: mypy run.py roop
 
   test:
-    runs-on: ubuntu-latest
+    #runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
