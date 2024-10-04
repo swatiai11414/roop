@@ -1,10 +1,10 @@
-#name: ci
+name: ci
 
 on: [push, pull_request]
 
 jobs:
   lint:
-   # runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -44,12 +44,12 @@ jobs:
 
      # - run: ffmpeg -i .github/examples/snapshot.mp4 -i .github/examples/output.mp4 -filter_complex psnr -f null -
 
-      - name: Convert output to HD
-        run: |
-          ffmpeg -i .github/examples/output.mp4 -vf "scale=1920:1080" -c:a copy .github/examples/output_hd.mp4
+      #- name: Convert output to HD
+       # run: |
+        #  ffmpeg -i .github/examples/output.mp4 -vf "scale=1920:1080" -c:a copy .github/examples/output_hd.mp4
 
       - name: Upload output_hd.mp4 as artifact
         uses: actions/upload-artifact@v3
         with:
           name: output-hd-video
-          path: .github/examples/output_hd.mp4
+          path: .github/examples/output.mp4
