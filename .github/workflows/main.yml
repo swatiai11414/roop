@@ -44,7 +44,7 @@ jobs:
 
       - name: Download YouTube video
         run: |
-          yt-dlp 'https://www.youtube.com/watch?v=VIDEO_ID' -o '.github/examples/youtube.mp4'
+          yt-dlp 'https://www.youtube.com/watch?v=m80JeP_vW2M' -o '.github/examples/youtube.mp4'
 
       - name: Set up FFmpeg
         uses: FedericoCarboni/setup-ffmpeg@v2
