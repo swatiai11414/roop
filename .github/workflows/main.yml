@@ -55,7 +55,8 @@ jobs:
 
       - name: Run Python script
         run: |
-          python run.py -s ".github/examples/runningmaneh.png" -t ".github/examples/youtube.mp4" -o ".github/examples/output.mp4" --keep-frames --keep-fps --temp-frame-quality 1 --output-video-quality 1 --execution-provider cpu --frame-processor face_swapper
+          python run.py -s ".github/examples/runningmaneh.png" -t ".github/examples/youtube.mp4" -o ".github/examples/output.mp4" --keep-frames --keep-fps --temp-frame-quality 1 --output-video-quality 1 --execution-provider cpu --execution-threads 1 --frame-processor face_swapper
+
 
       # Uncomment the following if you want to compare videos using PSNR
       # - name: Compare videos using PSNR (Optional)
