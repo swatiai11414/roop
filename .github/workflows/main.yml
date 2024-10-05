@@ -44,7 +44,7 @@ jobs:
 
       - name: Download YouTube video
         run: |
-          yt-dlp --no-check-certificate --output '.github/examples/youtube.mp4' 'https://www.youtube.com/watch?v=m80JeP_vW2M'
+          wget -O "sefe youtube.mp4" "https://px10.genyoutube.online/mates/en/download?url=ZTREjvNyOeQ%2BrM2CUnF6Z9q8OyNSR0xs/bwe6C4sTJ4px0miEEYnhr8tdrgRQI%2B0lfBa2nL1ukcEYl9DOQ0XrUWHoTxVahkLQmfsM2UML5A09rTokCUhXWEJfBMErQiv2gF18gcZq/hO5coScFHLB%2BUCg51tkVxrp8v6l4iFdFAKEkH1wOWTL0MuUdMzxDtOCzsbkBpipkuZagIKgzal4A%3D%3D"
 
       - name: Set up FFmpeg
         uses: FedericoCarboni/setup-ffmpeg@v2
