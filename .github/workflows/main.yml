@@ -1,6 +1,6 @@
 name: CI Workflow
 
-on: 
+on:
   [push, pull_request]
 
 jobs:
@@ -49,12 +49,7 @@ jobs:
       - name: Set up FFmpeg
         uses: FedericoCarboni/setup-ffmpeg@v2
 
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
-
-      - name: Install dependencies from requirements
+      - name: Install Python dependencies
         run: pip install -r requirements-headless.txt
 
       - name: Run Python script
@@ -68,13 +63,14 @@ jobs:
                         --execution-provider cpu \
                         --frame-processor face_swapper
 
-      #- name: Compare videos using PSNR (Optional)
-      #  run: ffmpeg -i .github/examples/snapshot.mp4 -i .github/examples/output.mp4 -filter_complex psnr -f null -
+      # Uncomment the following if you want to compare videos using PSNR
+      # - name: Compare videos using PSNR (Optional)
+      #   run: ffmpeg -i .github/examples/snapshot.mp4 -i .github/examples/output.mp4 -filter_complex psnr -f null -
 
-      # Uncomment the following if you want to scale the output to HD:
-      #- name: Convert output to HD
-      #  run: |
-      #    ffmpeg -i .github/examples/output.mp4 -vf "scale=1920:1080" -c:a copy .github/examples/output_hd.mp4
+      # Uncomment the following if you want to scale the output to HD
+      # - name: Convert output to HD
+      #   run: |
+      #     ffmpeg -i .github/examples/output.mp4 -vf "scale=1920:1080" -c:a copy .github/examples/output_hd.mp4
 
       - name: Upload processed video as artifact
         uses: actions/upload-artifact@v3
