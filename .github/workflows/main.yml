@@ -40,6 +40,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y python3-pip
+          sudo apt-get install -y python3-tk  # Install Tkinter
           pip3 install yt-dlp
 
       - name: Download YouTube video
