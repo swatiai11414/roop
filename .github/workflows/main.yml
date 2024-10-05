@@ -1,12 +1,13 @@
-name: ci
+name: CI Workflow
 
-on: [push, pull_request]
+on: 
+  [push, pull_request]
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Set up Python 3.9
@@ -14,15 +15,20 @@ jobs:
         with:
           python-version: 3.9
 
-      - run: pip install flake8
-      - run: pip install mypy
-      - run: flake8 run.py roop
-      - run: mypy run.py roop
+      - name: Install linters
+        run: |
+          pip install flake8 mypy
+
+      - name: Run flake8 linter
+        run: flake8 run.py roop
+
+      - name: Run mypy static type checker
+        run: mypy run.py roop
 
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Install CUDA
@@ -30,7 +36,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y nvidia-cuda-toolkit
 
-      - name: Set up ffmpeg
+      - name: Install yt-dlp
+        run: |
+          sudo apt update
+          sudo apt install -y python3-pip
+          pip3 install yt-dlp
+
+      - name: Download YouTube video
+        run: |
+          yt-dlp 'https://www.youtube.com/watch?v=VIDEO_ID' -o '.github/examples/youtube.mp4'
+
+      - name: Set up FFmpeg
         uses: FedericoCarboni/setup-ffmpeg@v2
 
       - name: Set up Python 3.9
@@ -38,18 +54,30 @@ jobs:
         with:
           python-version: 3.9
 
-      - run: pip install -r requirements-headless.txt
+      - name: Install dependencies from requirements
+        run: pip install -r requirements-headless.txt
 
-      - run: python run.py -s ".github/examples/runningmaneh.png" -t ".github/examples/g.mp4" -o ".github/examples/output.mp4" --keep-frames --keep-fps --temp-frame-quality 1 --output-video-quality 1 --execution-provider cpu --frame-processor face_swapper
+      - name: Run Python script
+        run: |
+          python run.py -s ".github/examples/runningmaneh.png" \
+                        -t ".github/examples/youtube.mp4" \
+                        -o ".github/examples/output.mp4" \
+                        --keep-frames --keep-fps \
+                        --temp-frame-quality 1 \
+                        --output-video-quality 1 \
+                        --execution-provider cpu \
+                        --frame-processor face_swapper
 
-     # - run: ffmpeg -i .github/examples/snapshot.mp4 -i .github/examples/output.mp4 -filter_complex psnr -f null -
+      #- name: Compare videos using PSNR (Optional)
+      #  run: ffmpeg -i .github/examples/snapshot.mp4 -i .github/examples/output.mp4 -filter_complex psnr -f null -
 
+      # Uncomment the following if you want to scale the output to HD:
       #- name: Convert output to HD
-       # run: |
-        #  ffmpeg -i .github/examples/output.mp4 -vf "scale=1920:1080" -c:a copy .github/examples/output_hd.mp4
+      #  run: |
+      #    ffmpeg -i .github/examples/output.mp4 -vf "scale=1920:1080" -c:a copy .github/examples/output_hd.mp4
 
-      - name: Upload output_hd.mp4 as artifact
+      - name: Upload processed video as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: output-hd-video
+          name: processed-video
           path: .github/examples/output.mp4
