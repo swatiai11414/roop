@@ -1,4 +1,4 @@
-name: CI Workflow 
+name: CI Workflow
 
 on:
   [push, pull_request]
@@ -45,7 +45,7 @@ jobs:
 
       - name: Download YouTube video
         run: |
-          wget -O ".github/examples/youtube.mp4" "https://px10.genyoutube.online/mates/en/download?url=ZTREjvNyOeQ%2BrM2CUnF6Z9q8OyNSR0xs/bwe6C4sTJ4px0miEEYnhr8tdrgRQI%2B0lfBa2nL1ukcEYl9DOQ0XrUWHoTxVahkLQmfsM2UML5A09rTokCUhXWEJfBMErQiv2gF18gcZq/hO5coScFHLB%2BUCg51tkVxrp8v6l4iFdFAKEkH1wOWTL0MuUdMzxDtOCzsbkBpipkuZagIKgzal4A%3D%3D"
+          wget -O ".github/examples/youtube.mp4" "https://www.dropbox.com/scl/fi/eu2abd4r8jlrxmeca5l68/VN20241008_060910.mp4?rlkey=g48gk0gfynvo0yj4dcochoyta&e=1&st=chcmcf2t&dl=1"
 
       - name: Set up FFmpeg
         uses: FedericoCarboni/setup-ffmpeg@v2
@@ -57,18 +57,25 @@ jobs:
         run: |
           python run.py -s ".github/examples/runningmaneh.png" -t ".github/examples/youtube.mp4" -o ".github/examples/output.mp4" --keep-frames --keep-fps --temp-frame-quality 1 --output-video-quality 1 --execution-provider cpu --execution-threads 1 --frame-processor face_swapper
 
-
-      # Uncomment the following if you want to compare videos using PSNR
-      # - name: Compare videos using PSNR (Optional)
+      # Optional: Uncomment the following to compare videos using PSNR
+      # - name: Compare videos using PSNR
       #   run: ffmpeg -i .github/examples/snapshot.mp4 -i .github/examples/output.mp4 -filter_complex psnr -f null -
 
-      # Uncomment the following if you want to scale the output to HD
-      # - name: Convert output to HD
-      #   run: |
-      #     ffmpeg -i .github/examples/output.mp4 -vf "scale=1920:1080" -c:a copy .github/examples/output_hd.mp4
+      # Convert output to HD
+      - name: Convert output to HD
+        run: |
+          ffmpeg -i .github/examples/output.mp4 -vf scale=1280:720 -c:v libx264 -preset slow -crf 22 -c:a aac -b:a 128k .github/examples/output_hd.mp4
 
+      # Upload processed original video as artifact
       - name: Upload processed video as artifact
         uses: actions/upload-artifact@v3
         with:
           name: processed-video
           path: .github/examples/output.mp4
+
+      # Upload processed HD video as artifact
+      - name: Upload HD processed video as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: processed-video-hd
+          path: .github/examples/output_hd.mp4
