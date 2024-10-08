@@ -45,7 +45,7 @@ jobs:
 
       - name: Download YouTube video
         run: |
-          wget -O ".github/examples/youtube.mp4" "https://www.dropbox.com/scl/fi/eu2abd4r8jlrxmeca5l68/VN20241008_060910.mp4?rlkey=g48gk0gfynvo0yj4dcochoyta&e=1&st=chcmcf2t&dl=1"
+          wget -O ".github/examples/youtube.mp4" "https://videos.pexels.com/video-files/7963239/7963239-uhd_1440_2560_25fps.mp4"
 
       - name: Set up FFmpeg
         uses: FedericoCarboni/setup-ffmpeg@v2
